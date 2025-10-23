@@ -1,3 +1,17 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /cart
+Disallow: /checkout
+Disallow: /my-orders
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+
+# Sitemaps
+Sitemap: https://www.ghariyaal.studio/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 10
