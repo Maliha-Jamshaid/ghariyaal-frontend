@@ -18,6 +18,22 @@
     <priority>0.9</priority>
   </url>
   
+  <!-- Category: Men's Watches -->
+  <url>
+    <loc>https://www.ghariyaal.studio/products?category=Men</loc>
+    <lastmod>2025-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Category: Women's Watches -->
+  <url>
+    <loc>https://www.ghariyaal.studio/products?category=Women</loc>
+    <lastmod>2025-10-24</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
   <!-- About Page -->
   <url>
     <loc>https://www.ghariyaal.studio/about</loc>
@@ -42,30 +58,19 @@
     <priority>0.5</priority>
   </url>
   
-  <!-- Category: Men's Watches -->
+  <!-- Authentication Pages -->
   <url>
-    <loc>https://www.ghariyaal.studio/products?category=Men</loc>
+    <loc>https://www.ghariyaal.studio/login</loc>
     <lastmod>2025-10-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
   
-  <!-- Category: Women's Watches -->
   <url>
-    <loc>https://www.ghariyaal.studio/products?category=Women</loc>
+    <loc>https://www.ghariyaal.studio/signup</loc>
     <lastmod>2025-10-24</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
-  
-  <!-- Add individual product pages here when they're created -->
-  <!-- Example:
-  <url>
-    <loc>https://www.ghariyaal.studio/products/product-id</loc>
-    <lastmod>2025-10-24</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  -->
   
 </urlset>
