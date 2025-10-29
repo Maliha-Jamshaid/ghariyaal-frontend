@@ -1,17 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyOrders } from '../redux/ordersSlice';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
+import RatingModal from '../components/RatingModal';
 import { Link } from 'react-router-dom';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 const MyOrders = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
+  const [ratingModal, setRatingModal] = useState({
+    isOpen: false,
+    order: null,
+    orderItem: null,
+    product: null,
+  });
 
   useEffect(() => {
     dispatch(fetchMyOrders());
   }, [dispatch]);
+
+  const openRatingModal = (order, orderItem, product) => {
+    setRatingModal({
+      isOpen: true,
+      order,
+      orderItem,
+      product,
+    });
+  };
+
+  const closeRatingModal = () => {
+    setRatingModal({
+      isOpen: false,
+      order: null,
+      orderItem: null,
+      product: null,
+    });
+    // Refresh orders to get updated rating status
+    dispatch(fetchMyOrders());
+  };
 
   if (loading) return <Loading fullScreen />;
   if (error) return <ErrorMessage message={error} onRetry={() => dispatch(fetchMyOrders())} />;
@@ -78,7 +106,7 @@ const MyOrders = () => {
                 <div className="p-6">
                   <div className="space-y-4">
                     {order.items.map((item) => (
-                      <div key={item._id || item.product._id} className="flex items-center space-x-4">
+                      <div key={item._id || item.product._id} className="flex items-start space-x-4">
                         <img
                           src={item.product.imageUrl || 'https://via.placeholder.com/80'}
                           alt={item.product.name}
@@ -89,6 +117,28 @@ const MyOrders = () => {
                           <p className="text-sm text-gray-600">
                             Quantity: {item.quantity} × Rs. {item.price.toLocaleString()}
                           </p>
+                          
+                          {/* Rating button for delivered orders */}
+                          {order.status === 'Delivered' && (
+                            <div className="mt-2">
+                              {item.isRated ? (
+                                <div className="flex items-center text-sm text-green-600">
+                                  <StarIcon className="w-4 h-4 mr-1" />
+                                  <span>Rated</span>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() =>
+                                    openRatingModal(order, item, item.product)
+                                  }
+                                  className="flex items-center text-sm text-primary-600 hover:text-primary-700 font-medium"
+                                >
+                                  <StarIcon className="w-4 h-4 mr-1" />
+                                  Rate this product
+                                </button>
+                              )}
+                            </div>
+                          )}
                         </div>
                         <p className="font-semibold text-gray-900">
                           Rs. {(item.price * item.quantity).toLocaleString()}
@@ -118,6 +168,17 @@ const MyOrders = () => {
           </div>
         )}
       </div>
+
+      {/* Rating Modal */}
+      {ratingModal.isOpen && (
+        <RatingModal
+          isOpen={ratingModal.isOpen}
+          onClose={closeRatingModal}
+          order={ratingModal.order}
+          orderItem={ratingModal.orderItem}
+          product={ratingModal.product}
+        />
+      )}
     </div>
   );
 };

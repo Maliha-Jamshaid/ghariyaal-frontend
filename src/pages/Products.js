@@ -6,7 +6,7 @@ import { addToCart } from '../redux/cartSlice';
 import SEO from '../components/SEO';
 import Loading from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
-import { MagnifyingGlassIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { MagnifyingGlassIcon, ShoppingCartIcon, StarIcon } from '@heroicons/react/24/outline';
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -162,6 +162,20 @@ const Products = () => {
                         {product.name}
                       </h3>
                     </Link>
+                    
+                    {/* Display rating if available */}
+                    {product.averageRating > 0 && (
+                      <div className="flex items-center space-x-1 mb-2">
+                        <StarIcon className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                        <span className="text-sm font-medium text-gray-900">
+                          {product.averageRating.toFixed(1)}
+                        </span>
+                        <span className="text-xs text-gray-500">
+                          ({product.totalRatings})
+                        </span>
+                      </div>
+                    )}
+                    
                     <p className="text-gray-600 text-sm mb-4 line-clamp-2 min-h-[2.5rem]">{product.description}</p>
                     <div className="mt-auto">
                       <div className="flex items-center justify-between mb-4">
