@@ -5,7 +5,7 @@ const SEO = ({
   title = 'Ghariyaal - Premium Watches Collection | Authentic Timepieces',
   description = 'Discover premium watches at Ghariyaal. Shop authentic men\'s and women\'s timepieces with free shipping across Pakistan. Best prices, 100% genuine products guaranteed.',
   keywords = 'watches, premium watches, men\'s watches, women\'s watches, authentic watches, luxury timepieces, watch store Pakistan, Ghariyaal',
-  image = '/og-image.jpg',
+  image = '/logo.png',
   url = 'https://www.ghariyaal.studio',
   type = 'website',
   noindex = false
@@ -35,11 +35,12 @@ const SEO = ({
       <meta property="og:site_name" content="Ghariyaal" />
       
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
+      <meta property="twitter:card" content="summary" />
       <meta property="twitter:url" content={fullUrl} />
       <meta property="twitter:title" content={fullTitle} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={fullImage} />
+      <meta property="twitter:image:alt" content="Ghariyaal - Premium Watch Store" />
     </Helmet>
   );
 };
