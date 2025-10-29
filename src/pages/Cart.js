@@ -89,7 +89,7 @@ const Cart = () => {
                   />
                   <div className="flex-1">
                     <Link
-                      to={`/products/${item.product._id}`}
+                      to={`/products/${item.product.slug || item.product._id}`}
                       className="text-lg font-semibold text-gray-900 hover:text-primary-600"
                     >
                       {item.product.name}

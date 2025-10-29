@@ -42,7 +42,7 @@ const ProductDetails = () => {
         description={product.description || `Shop ${product.name} at Ghariyaal. Premium quality watch with authentic guarantee and fast delivery across Pakistan.`}
         keywords={`${product.name}, ${product.brand || 'watch'}, ${product.category || 'premium watch'}, buy watch online Pakistan`}
         image={product.imageUrl}
-        url={`/products/${product._id}`}
+        url={`/products/${product.slug || product._id}`}
         type="product"
       />
       <div className="min-h-screen bg-gray-50 py-8">

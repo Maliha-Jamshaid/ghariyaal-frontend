@@ -149,7 +149,7 @@ const Products = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {products.map((product) => (
                 <div key={product._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition flex flex-col h-full">
-                  <Link to={`/products/${product._id}`} className="flex-shrink-0">
+                  <Link to={`/products/${product.slug || product._id}`} className="flex-shrink-0">
                     <img
                       src={product.imageUrl || 'https://via.placeholder.com/300'}
                       alt={product.name}
@@ -157,7 +157,7 @@ const Products = () => {
                     />
                   </Link>
                   <div className="p-4 flex flex-col flex-grow">
-                    <Link to={`/products/${product._id}`}>
+                    <Link to={`/products/${product.slug || product._id}`}>
                       <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-primary-600 transition line-clamp-2 min-h-[3.5rem]">
                         {product.name}
                       </h3>
