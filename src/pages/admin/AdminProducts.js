@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, createProduct, updateProduct, deleteProduct } from '../../redux/productsSlice';
 import Loading from '../../components/Loading';
 import ErrorMessage from '../../components/ErrorMessage';
-import { PencilIcon, TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, TrashIcon, PlusIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import api from '../../services/api';
 
 const AdminProducts = () => {
   const dispatch = useDispatch();
@@ -11,9 +12,12 @@ const AdminProducts = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [generatingAI, setGeneratingAI] = useState(false);
+  const [aiError, setAiError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    seoDescription: '',
     price: '',
     category: 'Men',
     imageUrl: '',
@@ -30,6 +34,7 @@ const AdminProducts = () => {
       setFormData({
         name: product.name,
         description: product.description,
+        seoDescription: product.seoDescription || '',
         price: product.price,
         category: product.category,
         imageUrl: product.imageUrl,
@@ -40,12 +45,14 @@ const AdminProducts = () => {
       setFormData({
         name: '',
         description: '',
+        seoDescription: '',
         price: '',
         category: 'Men',
         imageUrl: '',
         stock: '',
       });
     }
+    setAiError('');
     setIsModalOpen(true);
   };
 
@@ -59,6 +66,60 @@ const AdminProducts = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleGenerateAI = async () => {
+    console.log('Generate AI clicked');
+    console.log('SEO Description:', formData.seoDescription);
+    
+    if (!formData.seoDescription.trim()) {
+      setAiError('Please enter some draft text or keywords first');
+      return;
+    }
+
+    setGeneratingAI(true);
+    setAiError('');
+
+    try {
+      console.log('Calling AI API...');
+      const response = await api.post('/ai/generate-seo', {
+        draftText: formData.seoDescription,
+        productName: formData.name,
+        category: formData.category,
+      });
+
+      console.log('Full API Response:', response);
+      console.log('Response.data:', response.data);
+      console.log('Response.data.data:', response.data.data);
+
+      // Check different possible response structures
+      let newSeoDescription = '';
+      
+      if (response.data?.seoDescription) {
+        newSeoDescription = response.data.seoDescription;
+      } else if (response.data?.data?.seoDescription) {
+        newSeoDescription = response.data.data.seoDescription;
+      }
+      
+      console.log('Extracted SEO description:', newSeoDescription);
+
+      if (newSeoDescription) {
+        setFormData(prevData => ({
+          ...prevData,
+          seoDescription: newSeoDescription,
+        }));
+        
+        console.log('State updated successfully');
+      } else {
+        console.error('Could not find seoDescription in response');
+        setAiError('Received invalid response from AI');
+      }
+    } catch (error) {
+      console.error('AI Error:', error);
+      setAiError(error.response?.data?.message || 'Failed to generate SEO description. Please try again.');
+    } finally {
+      setGeneratingAI(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -222,6 +283,37 @@ const AdminProducts = () => {
                       rows="3"
                       className="input-field"
                     />
+                  </div>
+
+                  {/* SEO Description with AI Generator */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      SEO Meta Description (Optional)
+                    </label>
+                    <div className="relative">
+                      <textarea
+                        name="seoDescription"
+                        value={formData.seoDescription}
+                        onChange={handleChange}
+                        rows="3"
+                        placeholder="Enter keywords or draft text, then click 'Create with AI' for optimization..."
+                        className="input-field pr-32"
+                      />
+                      <button
+                        type="button"
+                        onClick={handleGenerateAI}
+                        disabled={generatingAI || !formData.seoDescription.trim()}
+                        className="absolute right-2 top-2 flex items-center space-x-1 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-sm rounded-md hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                      >
+                        <SparklesIcon className="h-4 w-4" />
+                        <span>{generatingAI ? 'Generating...' : 'Create with AI'}</span>
+                      </button>
+                    </div>
+                    {aiError && (
+                      <div className="mt-1">
+                        <span className="text-xs text-red-600">{aiError}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">

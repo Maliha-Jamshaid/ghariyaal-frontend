@@ -39,7 +39,7 @@ const ProductDetails = () => {
     <>
       <SEO 
         title={`${product.name} - ${product.brand || 'Premium Watch'} | Ghariyaal`}
-        description={product.description || `Shop ${product.name} at Ghariyaal. Premium quality watch with authentic guarantee and fast delivery across Pakistan.`}
+        description={product.seoDescription || product.description || `Shop ${product.name} at Ghariyaal. Premium quality watch with authentic guarantee and fast delivery across Pakistan.`}
         keywords={`${product.name}, ${product.brand || 'watch'}, ${product.category || 'premium watch'}, buy watch online Pakistan`}
         image={product.imageUrl}
         url={`/products/${product.slug || product._id}`}
