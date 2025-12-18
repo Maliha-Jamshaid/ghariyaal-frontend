@@ -20,29 +20,10 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && react-snap",
+    "build": "react-scripts build",
+    "build:snap": "react-scripts build && react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
-  },
-  "reactSnap": {
-    "puppeteerArgs": [
-      "--no-sandbox",
-      "--disable-setuid-sandbox"
-    ],
-    "skipThirdPartyRequests": true,
-    "cacheAjaxRequests": true,
-    "minifyHtml": {
-      "collapseWhitespace": false,
-      "removeComments": false
-    },
-    "crawl": true,
-    "include": [
-      "/",
-      "/products",
-      "/about",
-      "/contact",
-      "/faq"
-    ]
   },
   "eslintConfig": {
     "extends": [

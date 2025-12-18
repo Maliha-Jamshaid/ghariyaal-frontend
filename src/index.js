@@ -5,25 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const rootElement = document.getElementById('root');
+const root = ReactDOM.createRoot(rootElement);
 
-// Check if the app was pre-rendered by react-snap
-if (rootElement.hasChildNodes()) {
-  // Hydrate pre-rendered HTML (React 19 approach)
-  ReactDOM.hydrateRoot(
-    rootElement,
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-} else {
-  // Normal render for development
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  );
-}
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
