@@ -35,15 +35,62 @@ const ProductDetails = () => {
   if (error) return <ErrorMessage message={error} onRetry={() => dispatch(fetchProductById(id))} />;
   if (!product) return <ErrorMessage message="Product not found" />;
 
+  // Generate SEO-friendly title and description
+  const seoTitle = `Buy ${product.name} ${product.brand ? `by ${product.brand}` : ''} in Pakistan | Ghariyaal – Authentic Luxury Watch`;
+  const seoDescription = product.seoDescription || product.description || 
+    `Shop ${product.name} ${product.brand ? `by ${product.brand}` : ''} at Ghariyaal. Premium quality watch with authentic guarantee, best price Rs. ${product.price.toLocaleString()}, and fast delivery across Pakistan.`;
+  
+  const productUrl = `https://www.ghariyaal.studio/products/${product.slug || product._id}`;
+  const productImage = product.imageUrl || 'https://www.ghariyaal.studio/logo.png';
+  
+  // Generate Product Schema (JSON-LD) for rich snippets
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": productImage,
+    "description": product.description,
+    "brand": {
+      "@type": "Brand",
+      "name": product.brand || "Premium Watch"
+    },
+    "category": product.category || "Watches",
+    "offers": {
+      "@type": "Offer",
+      "url": productUrl,
+      "priceCurrency": "PKR",
+      "price": product.price,
+      "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      "seller": {
+        "@type": "Organization",
+        "name": "Ghariyaal"
+      }
+    }
+  };
+
+  // Add aggregateRating if reviews exist
+  if (product.averageRating && product.totalRatings > 0) {
+    productSchema.aggregateRating = {
+      "@type": "AggregateRating",
+      "ratingValue": product.averageRating.toFixed(1),
+      "reviewCount": product.totalRatings,
+      "bestRating": "5",
+      "worstRating": "1"
+    };
+  }
+
   return (
     <>
       <SEO 
-        title={`${product.name} - ${product.brand || 'Premium Watch'} | Ghariyaal`}
-        description={product.seoDescription || product.description || `Shop ${product.name} at Ghariyaal. Premium quality watch with authentic guarantee and fast delivery across Pakistan.`}
-        keywords={`${product.name}, ${product.brand || 'watch'}, ${product.category || 'premium watch'}, buy watch online Pakistan`}
-        image={product.imageUrl}
+        title={seoTitle}
+        description={seoDescription}
+        keywords={`${product.name}, ${product.brand || 'watch'}, ${product.category || 'premium watch'}, buy watch online Pakistan, luxury watches Pakistan, authentic watches`}
+        image={productImage}
         url={`/products/${product.slug || product._id}`}
         type="product"
+        structuredData={productSchema}
       />
       <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

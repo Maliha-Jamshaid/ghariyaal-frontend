@@ -8,7 +8,8 @@ const SEO = ({
   image = '/logo.png',
   url = 'https://www.ghariyaal.studio',
   type = 'website',
-  noindex = false
+  noindex = false,
+  structuredData = null
 }) => {
   const fullTitle = title.includes('Ghariyaal') ? title : `${title} | Ghariyaal`;
   const fullUrl = url.startsWith('http') ? url : `https://www.ghariyaal.studio${url}`;
@@ -35,12 +36,19 @@ const SEO = ({
       <meta property="og:site_name" content="Ghariyaal" />
       
       {/* Twitter */}
-      <meta property="twitter:card" content="summary" />
+      <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content={fullUrl} />
       <meta property="twitter:title" content={fullTitle} />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={fullImage} />
-      <meta property="twitter:image:alt" content="Ghariyaal - Premium Watch Store" />
+      <meta property="twitter:image:alt" content={fullTitle} />
+      
+      {/* Structured Data (JSON-LD) */}
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
     </Helmet>
   );
 };
