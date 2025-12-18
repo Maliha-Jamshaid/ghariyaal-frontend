@@ -18,7 +18,16 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    dispatch(fetchProductById(id));
+    // Check if product was preloaded by SSR
+    const preloadedProduct = window.__PRELOADED_PRODUCT__;
+    if (preloadedProduct && preloadedProduct._id === id) {
+      // Product already loaded by SSR, no need to fetch
+      console.log('Using SSR preloaded product data');
+    } else {
+      // Fetch product data normally
+      dispatch(fetchProductById(id));
+    }
+    
     return () => dispatch(clearCurrentProduct());
   }, [dispatch, id]);
 
